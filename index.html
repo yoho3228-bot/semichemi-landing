@@ -63,9 +63,9 @@ ul.steps li{margin:6px 0}
 <body>
 <main>
   <div class="hero">
-    <span class="tag">고압수만으로는 안 지워지는 때</span>
-    <h1>뿌리고 기다리면<br>찌든 때가 먼저 풀립니다</h1>
-    <p class="lead">세미케미 마스터 서피스. pH 12.5 알칼리 프리워시 한 병으로 차체, 휠, 타이어, 실내까지.</p>
+    <span class="tag" id="hero-tag">고압수만으로는 안 지워지는 때</span>
+    <h1 id="hero-title">뿌리고 기다리면<br>찌든 때가 먼저 풀립니다</h1>
+    <p class="lead" id="hero-lead">세미케미 마스터 서피스. pH 12.5 알칼리 프리워시 한 병으로 차체, 휠, 타이어, 실내까지.</p>
     <img src="img/hero.jpg" alt="세미케미 마스터 서피스 1L" width="900" height="1041" onerror="this.outerHTML='&lt;div class=ph&gt;제품 사진 (img/hero.jpg)&lt;/div&gt;'">
   </div>
 
@@ -123,6 +123,20 @@ ul.steps li{margin:6px 0}
   // 광고 주소에 붙은 값을 읽어 스마트스토어 링크로 넘긴다.
   // 광고 URL 예: ?nt_detail={{ad.name}}&nt_keyword={{campaign.name}}
   var q = new URLSearchParams(location.search);
+
+  // 광고에서 본 말과 첫 화면을 맞춘다 (광고 이름 = nt_detail). 목록에 없으면 기본(hook) 문구 그대로.
+  var HERO = {
+    uses4: ['세정제 여러 개 대신 한 병으로', '한 병으로<br>네 곳 세차 끝', '프리워시 1:20, 휠 1:10~20, 타이어 원액, 실내 1:40. 세미케미 마스터 서피스 한 병이면 됩니다.'],
+    '21L': ['진한 알칼리 원액', '1L로 프리워시<br>희석액 최대 21L', '1:20 희석 기준. 세미케미 마스터 서피스 한 병으로 차체, 휠, 타이어, 실내까지.']
+  };
+  var adName = (q.get('nt_detail') || q.get('utm_content') || '').toLowerCase();
+  Object.keys(HERO).forEach(function(k){
+    if (adName.indexOf(k.toLowerCase()) === 0) {
+      document.getElementById('hero-tag').textContent = HERO[k][0];
+      document.getElementById('hero-title').innerHTML = HERO[k][1];
+      document.getElementById('hero-lead').textContent = HERO[k][2];
+    }
+  });
   var nt = {
     nt_source: q.get('nt_source') || 'meta',
     nt_medium: q.get('nt_medium') || 'paid',
